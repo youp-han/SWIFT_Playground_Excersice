@@ -211,3 +211,72 @@ func returnFifteen() -> Int{
 
 returnFifteen()
 
+//------------------------------------------------------------
+// 코드 로그 입니다.
+// Day 2
+
+//Function in Function (Closure)
+func makeIncrementer() -> ((Int)-> Int) {
+    func addOne (number: Int) -> Int {
+        return number + 1
+    }
+    return addOne
+}
+
+var increment = makeIncrementer()
+increment(8)
+
+//a function receives a return value from a function
+//as a parameter
+// Blocks of codes that call be called later
+func hasAnyMatches(list:[Int], condition:(Int)->Bool)->Bool{
+    for item in list {
+        if condition(item){
+            print("conditon true \(item)")
+            return true
+        }
+        print("condition false, and item = \(item)")
+    }
+    return false
+}
+func lessThanTen(number: Int)-> Bool{
+    return number < 10
+}
+
+var numbers = [20, 19, 7, 12]
+hasAnyMatches(list: numbers, condition: lessThanTen)
+
+// closure sample with no name
+numbers.map({ (number:Int) -> Int in
+    let result = 3 * number
+    return result
+})
+
+let threeTimes = numbers.map({ (number:Int) -> Int in
+    let result = 3 * number
+    return result
+})
+print(threeTimes)
+
+//experiment : the closure that returns 0 for all odd numbers in list
+numbers.map({ (number:Int) -> Int in
+    let result = number % 2
+    if result == 0{
+        return number
+    }
+    return 0
+})
+// when the type of closure is known
+let mappedNumbers = numbers.map({ number in 3 * number})
+print (mappedNumbers)
+
+// parameters as numbers
+let sortedNumbers = numbers.sorted { $0 > $1 }
+let sortedNumbers2 = numbers.sorted { $0 < $1 }
+print(sortedNumbers)
+print(sortedNumbers2)
+
+//------------------------------------------------------------
+// 코드 로그 입니다.
+// Day 3
+
