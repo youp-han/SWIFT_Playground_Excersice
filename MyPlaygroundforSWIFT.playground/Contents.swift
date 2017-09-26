@@ -276,7 +276,172 @@ let sortedNumbers2 = numbers.sorted { $0 < $1 }
 print(sortedNumbers)
 print(sortedNumbers2)
 
+
+
 //------------------------------------------------------------
 // 코드 로그 입니다.
 // Day 3
+
+//Objects and Classes
+
+class Shape{
+    var numberOfSides = 0
+    func simpleDescription() -> String {
+        return "A shape with \(numberOfSides) sides."
+    }
+
+}
+
+
+
+var shape = Shape()
+shape.numberOfSides = 7
+var shapeDescription = shape.simpleDescription();
+print(shapeDescription)
+
+
+
+//initializer
+//when Initializing the class, the init variables must be declared
+class NamedShape {
+    var numberOfSides : Int = 0
+    var name: String
+    
+    init(name: String){
+        self.name = name
+    }
+    
+    func simpleDescription() -> String{
+        return "A Share with\(numberOfSides) sides, and the name is \(name)"
+    }
+}
+var testname = NamedShape(name:"Mike")
+print(testname.simpleDescription())
+
+
+//superclass inherritance
+class Square: NamedShape{
+    var sideLength: Double
+    init(sideLength: Double, name: String){
+        self.sideLength = sideLength
+        super.init(name: name)
+        numberOfSides = 4
+    }
+    
+    func area() -> Double {
+        return sideLength * sideLength
+    }
+    
+    override func simpleDescription() -> String {
+        return "A square with sides of lengh \(sideLength)"
+    }
+}
+
+let test = Square(sideLength: 5.2, name: "my Test Square")
+print(test.area())
+print(test.numberOfSides)
+print(test.simpleDescription())
+
+
+//excercise : area of Circle
+class Circle: NamedShape{
+    var radius: Double
+    let pi: Double = 3.141592
+    init(radius: Double, name: String){
+        self.radius = radius
+        super.init(name:name)
+        numberOfSides = 0
+    }
+    
+    func area() -> Double{
+        return radius * radius * pi
+    }
+    
+    override func simpleDescription() -> String {
+        return "A circle with radius of \(radius)"
+    }
+}
+
+var testCircle = Circle(radius: 4.0, name: "my Test Circle")
+print(testCircle.area())
+print(testCircle.simpleDescription())
+
+
+//getter, setter of properties
+
+class EquilateralTriangle: NamedShape{
+    var sideLength: Double = 0.0
+    
+    init(sideLength: Double, name: String){
+        self.sideLength = sideLength
+        super.init(name: name)
+        numberOfSides = 3
+    }
+    
+    var perimeter: Double{
+        get{
+            return 3.0 * sideLength
+        }
+        set{
+            sideLength = newValue / 3.0
+        }
+    }
+    
+    override func simpleDescription() -> String {
+        return "An equilateral triangle with sides of length\(sideLength)"
+    }
+}
+
+var triagle = EquilateralTriangle(sideLength: 3.1, name: "a Triagle")
+print(triagle.perimeter)
+triagle.perimeter = 9.9
+print(triagle.sideLength)
+
+class TriangleAndSquare{
+    
+    var triangle:EquilateralTriangle{
+        willSet{
+            square.sideLength = newValue.sideLength
+        }
+    }
+    
+    var square: Square{
+        willSet{
+            triagle.sideLength = newValue.sideLength
+        }
+    }
+    
+    init(size: Double, name: String){
+        square = Square(sideLength: size, name: name)
+        triangle = EquilateralTriangle(sideLength: size, name: name)
+    }
+}
+
+var triangleAndSquare = TriangleAndSquare(size: 10, name: "Another Test Shape")
+print(triangleAndSquare.square.sideLength)
+print(triangleAndSquare.triangle.sideLength)
+triangleAndSquare.square = Square(sideLength: 50, name: "Larger Square")
+print(triangleAndSquare.triangle.sideLength)
+print(triangleAndSquare.square.sideLength)
+
+
+let optionalSquare: Square? = Square(sideLength: 2.5, name: "optional Square")
+let sideLength = optionalSquare?.sideLength
+print("optional sidelength = \(sideLength)")
+
+
+//------------------------------------------------------------
+// 코드 로그 입니다.
+// Day 4
+//Enumerationas and Structures
+
+
+
+
+
+
+
+
+
+
 
