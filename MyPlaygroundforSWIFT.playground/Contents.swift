@@ -433,15 +433,207 @@ print("optional sidelength = \(sideLength)")
 //------------------------------------------------------------
 // 코드 로그 입니다.
 // Day 4
-//Enumerationas and Structures
+// Enumerationas and Structures
+// Default 로 raw value 는 0 에서 시작하지만, 다음의 경우
+// case ace = 1에서 시작함.
+
+enum Rank: Int{
+    case ace = 1
+    case two, three, four, five, six, seven, eight, nine, ten
+    case jack, queen, king
+    func simpleDescription() -> String{
+        switch self{
+        case .ace:
+            return "ace"
+        case .jack:
+            return "jack"
+        case .queen:
+            return "queen"
+        case .king:
+            return "king"
+        default:
+            return String(self.rawValue)
+        }
+    }
+}
+
+let ace = Rank.ace
+let aceRawValue = ace.rawValue
+let two = Rank.two
+let twoRawValue = two.rawValue
+
+if let convertedRank = Rank(rawValue:3) {
+    let threeDescription = convertedRank.simpleDescription()
+print(threeDescription)
+}
 
 
+//enum 2
+enum Suit{
+    case spades, hearts, diamonds, clubs
+    func simpleDescription()->String{
+        switch self{
+        case .spades:
+            return "spades"
+        case .hearts:
+            return "hearts"
+        case .diamonds:
+            return "diamonds"
+        case .clubs:
+            return "clubs"
+        }
+    }
+    
+    //experiment
+    func color()->String{
+        switch self{
+        case .spades:
+            return "black"
+        case .clubs:
+            return "black"
+        default:
+            return "red"
+        }
+    }
+}
+
+let hearts = Suit.hearts
+let heartsDescription = hearts.simpleDescription()
+let heartsColor = hearts.color()
 
 
+// enum 3
+
+enum ServerResponse {
+    case result (String, String)
+    case failure (String)
+}
+
+let success = ServerResponse.result("6:00 am", "8:09 pm")
+let failure = ServerResponse.failure("Out of cheese")
+
+switch success {
+case let .result(sunrise, sunset):
+    print("Sunrise is at\(sunrise) and sunset is at \(sunset).")
+case let .failure(message):
+    print("Failure... \(message)")
+}
+
+//struct
+// struct vs class
+// struct gets copied where classes are passed by reference
+
+struct Card {
+    var rank: Rank
+    var suit: Suit
+    func simpleDescription() -> String {
+        return "The \(rank.simpleDescription()) of \(suit.simpleDescription())"
+    }
+}
+let threeOfSpades = Card(rank: .three, suit: .spades)
+let threeOfSpedesDescription = threeOfSpades.simpleDescription()
 
 
+//Protocals and Estensions
+//Classes, enum and Structs can adopt protocols
+
+protocol ExampleProtocol {
+    var simpleDescription : String { get }
+    mutating func adjust()
+}
+
+class SimpleClass: ExampleProtocol{
+    var simpleDescription: String = "A very simple class"
+    var anotherProperty: Int = 52342
+    func adjust(){
+        simpleDescription += " Now 100% adjusted"
+    }
+}
+
+var a = SimpleClass()
+a.adjust()
+let aDescription = a.simpleDescription
+
+struct SimpleStruture: ExampleProtocol {
+    var simpleDescription: String = "A simple structure"
+    mutating func adjust(){
+        simpleDescription += " (adjusted)"
+    }
+}
+
+var b = SimpleStruture()
+b.adjust()
+let bDescription = b.simpleDescription
+
+// why mutating func in Structure?
+// because, the structure is a value type where class is a reference type
+// and to make changes in a function of the structure,
+// the function should be mutable
+// example
+
+struct Rectangle {
+    var height = 1
+    var width = 1
+
+    func area() -> Int{
+        return height * width
+    }
+    
+    mutating func scaleBy(value: Int) {
+        width*=value
+        height*=value
+    }
+}
+
+var rect = Rectangle()
+// let rect = Rectangle() will give errors for its a value type (immutable)
+rect.area()
+rect.scaleBy(value: 3)
+rect.area()
 
 
+// extension of protocol
+
+extension Int: ExampleProtocol {
+    var simpleDescription: String {
+        return "the number \(self)"
+    }
+    
+    mutating func adjust(){
+        self += 42
+    }
+}
+
+print (7.simpleDescription)
+
+let protocolValue: ExampleProtocol = a
+print(protocolValue.simpleDescription)
+//print(protocolValue.anotherProperty)
+
+//Error Handling
+enum PrinterError: Error{
+    case outOfPaper
+    case noToner
+    case onFire
+}
+
+func send(job: Int, toPrinter printerName: String) throws -> String{
+    if printerName == "Never Has Toner" {
+        throw PrinterError.noToner
+    }
+    return "Job Sent"
+}
+
+do{
+    // the following statement throws no error
+    // let printerResponse = try send(job: 1040, toPrinter: "Bi Sheng")
+     let printerResponse = try send(job: 1040, toPrinter: "Never Has Toner")
+    print(printerResponse)
+}catch{
+    print(error)
+}
 
 
-
+//------------------------------------------------------------
+// 코드 로그 입니다.
+// Day 5
