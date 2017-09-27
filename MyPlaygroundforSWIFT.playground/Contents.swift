@@ -637,3 +637,97 @@ do{
 //------------------------------------------------------------
 // 코드 로그 입니다.
 // Day 5
+
+do {
+    let printerResponse = try send(job: 1440, toPrinter: "Gutenberg")
+    print(printerResponse)
+} catch PrinterError.onFire{
+    print("I'll just put this over here, with the rest of the fire.")
+} catch let printerError as PrinterError{
+    print("Printer error: \(printerError).")
+} catch {
+    print(error)
+}
+
+//optional try (try?) will convert result to an optional.
+//so if the function throws an error, the error is discarded and
+// result is nil
+let printerSuccess = try? send(job: 1884, toPrinter: "Mergenthaler")
+let printerFailure = try? send(job: 1884, toPrinter: "Never Has Toner")
+
+//defer
+
+var fridgeIsOpen = false
+
+let fridgeContent = ["milk", "eggs", "leftovers"]
+
+func fridgeContains(_ food: String) -> Bool {
+    fridgeIsOpen = true
+    defer{
+        fridgeIsOpen = false
+    }
+    
+    let result = fridgeContent.contains(food)
+    return result
+}
+
+fridgeContains("banana")
+print(fridgeIsOpen)
+
+
+//Generics
+func makeArray<Item>(repeating item: Item, numberOfTimes: Int) -> [Item]{
+    var result = [Item]()
+    for _ in 0..<numberOfTimes {
+        result.append(item)
+    }
+    return result
+}
+makeArray(repeating: "knock", numberOfTimes: 4)
+
+
+enum OptionalValue<Wrapped>{
+    case none
+    case some(Wrapped)
+}
+var possibleInteger: OptionalValue<Int> = .none
+print("possibleinteger = \(possibleInteger)")
+possibleInteger = .some(100)
+print("possibleinteger (100) = \(possibleInteger)")
+
+func anyCommonElements<T: Sequence, U: Sequence> (_ lhs: T, _ rhs: U) -> Bool where T.Iterator.Element: Equatable, T.Itertor.Element == U.Iterator.Element{
+    for lhsItem in lhs{
+        for rhsItem in rhs{
+            if lhsItem == rhsItem {
+                return true
+            }
+        }
+    }
+    
+    return false
+}
+
+anyCommonElements([1,2,3], [3])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
